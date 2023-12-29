@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/components/ui/use-toast"
-import { TreeDeciduous } from 'lucide-react';
+import { TreeDeciduous, Lock } from 'lucide-react';
 
 import { Dayjs, PluginFunc } from 'dayjs'
 import { Input } from './ui/input';
@@ -154,20 +154,20 @@ function Home() {
             </section>
             <section>
                 {selectedIdea && (
-                    <>
-                        <Sheet open={openSheet} onOpenChange={setOpenSheet}>
-                            <SheetContent className="h-screen flex flex-col">
-                                <SheetHeader className="py-4 px-6">
-                                    <SheetTitle className="text-xl font-bold mb-4">Are you sure absolutely sure?</SheetTitle>
-                                </SheetHeader>
-                                <form className="p-6 flex-grow">
-                                    <Input {...register("title")} defaultValue={selectedIdea.title} className="mb-4" />
-                                    <Textarea {...register("description")} defaultValue={selectedIdea.description} className="mb-4 flex-grow p-4" />
-                                    <Button className="ixed bottom-0 left-0 w-full bg-gray-800 text-white py-4" type="submit">Save Changes</Button>
-                                </form>
-                            </SheetContent>
-                        </Sheet>
-                    </>
+                    <Sheet open={openSheet} onOpenChange={setOpenSheet}>
+                        <SheetContent className="h-screen flex flex-col">
+                            <SheetHeader className="py-4">
+                                <SheetTitle className="text-xl font-bold">✨ Sharpen Your Spark into a Flame</SheetTitle>
+                            </SheetHeader>
+                            <form className="flex flex-col flex-grow">
+                                <Input {...register("title")} defaultValue={selectedIdea.title} className="mb-4" />
+                                <Textarea {...register("description")} defaultValue={selectedIdea.description} className="mb-4 flex-1 p-4" />
+                                <Button className="w-full bg-gray-800 text-white py-4 space-x-2" type="submit">
+                                    <Lock size={20} /> <span>Lock it in! </span>
+                                </Button>
+                            </form>
+                        </SheetContent>
+                    </Sheet>
                 )}
             </section>
         </div >
