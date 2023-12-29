@@ -14,7 +14,6 @@ import {
 } from "@/components/ui/drawer"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/components/ui/use-toast"
-import random from 'random';
 import { TreeDeciduous } from 'lucide-react';
 
 
@@ -43,7 +42,7 @@ function Home() {
         reset();
         toast({
             title: "✨ ⚡ Boom! Another idea added to the brilliance bank!",
-            description: "Keep feeding the fire!  You're on a creative roll!  Keep crushing it!",
+            description: "Keep feeding the fire!  You&apos;re on a creative roll!  Keep crushing it!",
         });
     };
 
@@ -52,7 +51,7 @@ function Home() {
             <Drawer open={open}>
                 <header className="flex items-center justify-between py-8">
                     <h1 className="text-4xl font-bold tracking-tight">
-                        Got a spark? ⚡️ Don't let it fizzle!
+                        Got a spark? ⚡️ Don&apos;t let it fizzle!
                     </h1>
                     <DrawerTrigger asChild><Button className="bg-teal-500 hover:bg-teal-400 text-white font-bold py-2 px-4 rounded" onClick={() => setOpen(true)}>
                         <TreeDeciduous />
@@ -98,7 +97,7 @@ function Home() {
             <section className="mt-8">
 
                 {ideas.length === 0 && (
-                    <p className="text-gray-600">Don't worry, your first idea is just around the corner.</p>
+                    <p className="text-gray-600">Don&apos;t worry, your first idea is just around the corner.</p>
                 )}
                 <ul className="space-y-4">
                     {ideas.map((idea) => (
