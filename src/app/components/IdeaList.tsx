@@ -68,8 +68,8 @@ function Home() {
     return (
         <div className="container mx-auto p-4">
             <Drawer open={open}>
-                <header className="flex items-center justify-between py-8">
-                    <h1 className="text-4xl font-bold tracking-tight">
+                <header className="flex flex-col lg:flex-row items-center space-y-2 lg:justify-between py-8">
+                    <h1 className="text-2xl lg:text-4xl text-center font-bold tracking-tight">
                         Got a spark? ⚡️ Don&apos;t let it fizzle!
                     </h1>
                     <DrawerTrigger asChild><Button className="bg-teal-500 hover:bg-teal-400 text-white font-bold py-2 px-4 rounded" onClick={() => setOpen(true)}>
@@ -124,7 +124,7 @@ function Home() {
                             <h3 className="text-lg font-semibold mb-2">{idea.title}</h3>
                             <p className="text-gray-700">{idea.description}</p>
                             <span className="text-gray-500">
-                                Date Created: {idea.dateCreated ? dayjs(idea.dateCreated).fromNow() : (
+                                ... {idea.dateCreated ? dayjs(idea.dateCreated).fromNow() : (
                                     <i>This idea was born in the mists of time!</i>
                                 )}
                             </span>
