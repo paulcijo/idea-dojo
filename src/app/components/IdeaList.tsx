@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import dayjs from 'dayjs';
 import {
     Drawer,
@@ -16,10 +16,27 @@ import { Button } from "@/components/ui/button"
 import { useToast } from "@/components/ui/use-toast"
 import { TreeDeciduous } from 'lucide-react';
 
+import { Dayjs, PluginFunc } from 'dayjs'
+type DateType = string | number | Date | Dayjs
+
+declare module 'dayjs' {
+    interface Dayjs {
+        fromNow(withoutSuffix?: boolean): string
+        from(compared: DateType, withoutSuffix?: boolean): string
+        toNow(withoutSuffix?: boolean): string
+        to(compared: DateType, withoutSuffix?: boolean): string
+    }
+}
+
+interface Idea {
+    title: string;
+    description: string;
+    dateCreated: Date;
+}
 
 function Home() {
-    const { register, handleSubmit, formState: { errors }, reset } = useForm();
-    const [ideas, setIdeas] = useState([]);
+    const { register, handleSubmit, formState: { errors }, reset } = useForm<Idea>();
+    const [ideas, setIdeas] = useState<Idea[]>([]);
     const [open, setOpen] = React.useState(false);
     const { toast } = useToast();
 
@@ -30,13 +47,15 @@ function Home() {
         const storedIdeas = localStorage.getItem('ideas');
         if (storedIdeas) {
             const parsedIdeas = JSON.parse(storedIdeas);
-            setIdeas(parsedIdeas.sort((a, b) => new Date(b.dateCreated) - new Date(a.dateCreated)));
+            setIdeas(parsedIdeas.sort((a: Idea, b: Idea) =>
+                new Date(b.dateCreated).getTime() - new Date(a.dateCreated).getTime()
+            ));
         }
     }, []);
 
-    const onSubmit = (data) => {
+    const onSubmit: SubmitHandler<Idea> = (data: Idea) => {
         const currentDate = new Date();
-        setIdeas((prevIdeas) => [...prevIdeas, { ...data, dateCreated: currentDate }].sort((a, b) => new Date(b.dateCreated) - new Date(a.dateCreated)));
+        setIdeas((prevIdeas) => [...prevIdeas, { ...data, dateCreated: currentDate }].sort((a: Idea, b: Idea) => new Date(b.dateCreated).getTime() - new Date(a.dateCreated).getTime()));
         localStorage.setItem('ideas', JSON.stringify(ideas));
         setOpen(false);
         reset();
