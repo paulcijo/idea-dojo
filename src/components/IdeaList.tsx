@@ -12,11 +12,21 @@ import {
     DrawerTitle,
     DrawerTrigger,
 } from "@/components/ui/drawer"
+import {
+    Sheet,
+    SheetContent,
+    SheetDescription,
+    SheetHeader,
+    SheetTitle,
+    SheetTrigger,
+} from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/components/ui/use-toast"
 import { TreeDeciduous } from 'lucide-react';
 
 import { Dayjs, PluginFunc } from 'dayjs'
+import { Input } from './ui/input';
+import { Textarea } from './ui/textarea';
 type DateType = string | number | Date | Dayjs
 
 declare module 'dayjs' {
@@ -38,7 +48,14 @@ function Home() {
     const { register, handleSubmit, formState: { errors }, reset } = useForm<Idea>();
     const [ideas, setIdeas] = useState<Idea[]>([]);
     const [open, setOpen] = React.useState(false);
+    const [openSheet, setOpenSheet] = useState(false);
     const { toast } = useToast();
+    const [selectedIdea, setSelectedIdea] = useState<Idea>();
+
+    const handleIdeaClick = (idea: Idea) => {
+        setOpenSheet(true); // Assuming you have a state variable to control sheet visibility
+        setSelectedIdea(idea); // Store the selected idea for display
+    };
 
     var relativeTime = require('dayjs/plugin/relativeTime')
     dayjs.extend(relativeTime)
@@ -52,6 +69,10 @@ function Home() {
             ));
         }
     }, []);
+    useEffect(() => {
+        console.log('i get executed whenever a changes')
+        console.log(openSheet)
+    }, [openSheet])
 
     const onSubmit: SubmitHandler<Idea> = (data: Idea) => {
         const currentDate = new Date();
@@ -110,7 +131,6 @@ function Home() {
                             </form>
                         </div>
                     </div>
-
                 </DrawerContent>
             </Drawer>
             <section className="mt-8">
@@ -120,7 +140,7 @@ function Home() {
                 )}
                 <ul className="space-y-4">
                     {ideas.map((idea) => (
-                        <li key={idea.title} className="bg-white rounded-lg shadow p-4">
+                        <li key={idea.title} className="bg-white rounded-lg shadow p-4" onClick={() => handleIdeaClick(idea)}>
                             <h3 className="text-lg font-semibold mb-2">{idea.title}</h3>
                             <p className="text-gray-700">{idea.description}</p>
                             <span className="text-gray-500">
@@ -131,6 +151,24 @@ function Home() {
                         </li>
                     ))}
                 </ul>
+            </section>
+            <section>
+                {selectedIdea && (
+                    <>
+                        <Sheet open={openSheet} onOpenChange={setOpenSheet}>
+                            <SheetContent className="h-screen flex flex-col">
+                                <SheetHeader className="py-4 px-6">
+                                    <SheetTitle className="text-xl font-bold mb-4">Are you sure absolutely sure?</SheetTitle>
+                                </SheetHeader>
+                                <form onSubmit={handleSubmit} className="p-6 flex-grow">
+                                    <Input {...register("title")} defaultValue={selectedIdea.title} className="mb-4" />
+                                    <Textarea {...register("description")} defaultValue={selectedIdea.description} className="mb-4 flex-grow p-4" />
+                                    <Button className="ixed bottom-0 left-0 w-full bg-gray-800 text-white py-4" type="submit">Save Changes</Button>
+                                </form>
+                            </SheetContent>
+                        </Sheet>
+                    </>
+                )}
             </section>
         </div >
     );
