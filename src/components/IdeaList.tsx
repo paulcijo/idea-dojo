@@ -160,7 +160,7 @@ function Home() {
                                 <SheetHeader className="py-4 px-6">
                                     <SheetTitle className="text-xl font-bold mb-4">Are you sure absolutely sure?</SheetTitle>
                                 </SheetHeader>
-                                <form onSubmit={handleSubmit} className="p-6 flex-grow">
+                                <form className="p-6 flex-grow">
                                     <Input {...register("title")} defaultValue={selectedIdea.title} className="mb-4" />
                                     <Textarea {...register("description")} defaultValue={selectedIdea.description} className="mb-4 flex-grow p-4" />
                                     <Button className="ixed bottom-0 left-0 w-full bg-gray-800 text-white py-4" type="submit">Save Changes</Button>
