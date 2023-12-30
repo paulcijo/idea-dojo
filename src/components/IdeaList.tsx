@@ -52,11 +52,6 @@ function Home() {
     const { toast } = useToast();
     const [selectedIdea, setSelectedIdea] = useState<Idea>();
 
-    const handleIdeaClick = (idea: Idea) => {
-        setOpenSheet(true); // Assuming you have a state variable to control sheet visibility
-        setSelectedIdea(idea); // Store the selected idea for display
-    };
-
     var relativeTime = require('dayjs/plugin/relativeTime')
     dayjs.extend(relativeTime)
 
@@ -69,10 +64,17 @@ function Home() {
             ));
         }
     }, []);
+
     useEffect(() => {
-        console.log('i get executed whenever a changes')
-        console.log(openSheet)
-    }, [openSheet])
+        console.log(selectedIdea?.title);
+        setOpenSheet(true);
+    }, [selectedIdea]); // Run the effect whenever selectedIdea changes
+
+    useEffect(() => {
+        if (openSheet === false) {
+            setSelectedIdea(undefined);
+        }
+    }, [openSheet]); // Run the effect whenever selectedIdea changes
 
     const onSubmit: SubmitHandler<Idea> = (data: Idea) => {
         const currentDate = new Date();
@@ -86,9 +88,10 @@ function Home() {
         });
     };
 
+
     return (
         <div className="container mx-auto p-4">
-            <Drawer open={open}>
+            <Drawer open={open} onOpenChange={setOpen}>
                 <header className="flex flex-col lg:flex-row items-center space-y-2 lg:justify-between py-8">
                     <h1 className="text-2xl lg:text-4xl text-center font-bold tracking-tight">
                         Got a spark? ⚡️ Don&apos;t let it fizzle!
@@ -140,7 +143,7 @@ function Home() {
                 )}
                 <ul className="space-y-4">
                     {ideas.map((idea) => (
-                        <li key={idea.title} className="bg-white rounded-lg shadow p-4" onClick={() => handleIdeaClick(idea)}>
+                        <li key={idea.title} className="bg-white rounded-lg shadow p-4" onClick={() => setSelectedIdea(idea)}>
                             <h3 className="text-lg font-semibold mb-2">{idea.title}</h3>
                             <p className="text-gray-700">{idea.description}</p>
                             <span className="text-gray-500">
@@ -155,7 +158,7 @@ function Home() {
             <section>
                 {selectedIdea && (
                     <Sheet open={openSheet} onOpenChange={setOpenSheet}>
-                        <SheetContent className="h-screen flex flex-col">
+                        <SheetContent className="h-full flex flex-col w-[400px] sm:w-screen">
                             <SheetHeader className="py-4">
                                 <SheetTitle className="text-xl font-bold">✨ Sharpen Your Spark into a Flame</SheetTitle>
                             </SheetHeader>
